@@ -1,0 +1,71 @@
+/* BUTTON */
+.btn {
+    padding: 8px 14px;
+    border-radius: var(--radius-md);
+    font-weight: bolder;
+    border: none;
+    cursor: pointer;
+    transition: 0.2s;
+    margin: 20px;
+}
+
+
+.btn--primary {
+    background: var(--color-primary);
+}
+
+.btn--danger {
+    background-color: var(--color-danger);
+    color: white;
+}
+
+.btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+.icon-btn {
+    border: none;
+    background: transparent;
+    color: var(--color-primary);
+    border-radius: var(--radius-sm);
+    cursor: pointer;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.2s, color 0.2s;
+}
+
+/* размеры кнопки */
+.icon-btn--sm {
+    width: 28px;
+    height: 28px;
+}
+
+.icon-btn--md {
+    width: 36px;
+    height: 36px;
+}
+
+.icon-btn--lg {
+    width: 48px;
+    height: 48px;
+}
+.icon-btn--ghost:hover {
+    background: rgba(255, 255, 255, 0.08);
+}
+.icon-btn--danger:hover {
+    background: rgba(255, 255, 255, 0.08);
+}
+
+.icon-btn--primary {
+    background: var(--color-primary);
+    color: white;
+}
+.icon-btn--danger {
+    color: var(--color-danger);
+
+}
+/* иконка */
+.icon-btn svg {
+    width: 92%;
+    height: 92%;
+}

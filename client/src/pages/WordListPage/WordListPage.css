@@ -1,0 +1,25 @@
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+tr:hover {
+    background-color: #3FD1C2B2;
+}
+button {
+    color:#3fd1c2;
+    font-size:36pt;
+    background: none;
+    border: none;
+    padding: 0;
+    cursor: pointer;
+}
+.add-word-button {
+    color:#3fd1c2;
+    font-size:36pt;
+    background: none;
+    border: none;
+    padding: 0;
+    cursor: pointer;
+}
+
