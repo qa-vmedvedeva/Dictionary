@@ -1,2 +1,2 @@
-![CI](https://github.com/USERNAME/REPO/actions/workflows/ci.yml/badge.svg)
+![CI](https://github.com/qa-vmedvedeva/Dictionary/actions/workflows/ci.yml/badge.svg)
 Dictionary app
