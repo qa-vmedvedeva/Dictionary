@@ -17,7 +17,7 @@ jobs:
       - name: Checkout tests repo
         uses: actions/checkout@v4
         with:
-          repository: qa-vmedvedeva/Dictionary-tests
+          repository: qa-vmedvedeva/Dictionary-test
           ref: master
           path: ./
           token: ${{ secrets.TESTS_REPO_TOKEN }}
@@ -39,7 +39,7 @@ jobs:
       # 5. Запустить тесты ИЗ другого репо
       - name: Run tests
         run: |
-          pytest Dictionary-tests -v
+          pytest Dictionary-test -v
           
       - name: Generate Allure results
         if: always()
