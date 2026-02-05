@@ -39,7 +39,7 @@ jobs:
       # 5. Запустить тесты из другого репо
       - name: Run tests
         run: |
-          pytest Dictionaty_test -v
+          pytest tests -v
           
       # 6. Node + сборка клиента
       - name: Set up Node
