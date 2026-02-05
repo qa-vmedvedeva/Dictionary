@@ -1,0 +1,69 @@
+name: App + Tests CI
+
+on:
+  push:
+    branches: [ master ]
+
+jobs:
+  test-app:
+    runs-on: ubuntu-latest
+    services:
+      sqlite:
+        image: nouchka/sqlite3   # просто контейнер, БД файловая
+        options: >-
+          --health-cmd "echo ok"
+    steps:
+      # 1. Скачать приложение
+      - name: Checkout app repo
+        uses: actions/checkout@v4
+
+      # 2. Скачать репо с тестами
+      - name: Checkout tests repo
+        uses: actions/checkout@v4
+        with:
+          repository: qa-vmedvedeva/Dictionary-tests
+          path: ./
+          token: ${{ secrets.TESTS_REPO_TOKEN }}
+
+      # 3. Python
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      # 4. Установить зависимости тестов
+      - name: Install test deps
+        run: |
+          pip install -r ./requirements.txt
+
+      - name: Add app to PYTHONPATH
+        run: echo "PYTHONPATH=$PYTHONPATH:$(pwd)" >> $GITHUB_ENV
+        
+      # 5. Запустить тесты ИЗ другого репо
+      - name: Run tests
+        run: |
+          pytest Dictionary-tests -v
+          
+      - name: Generate Allure results
+        if: always()
+        run: pytest --alluredir=allure-results || true
+
+      - name: Upload Allure results
+        uses: actions/upload-artifact@v4
+        with:
+          name: allure-results
+          path: allure-results
+
+      # 6. Node + сборка клиента
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install client deps
+        working-directory: ./client
+        run: npm install
+
+      - name: Build React app
+        working-directory: ./client
+        run: npm run build
