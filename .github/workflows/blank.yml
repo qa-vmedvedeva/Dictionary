@@ -41,16 +41,6 @@ jobs:
         run: |
           pytest Dictionaty_test -v
           
-      - name: Generate Allure results
-        if: always()
-        run: pytest --alluredir=allure-results || true
-
-      - name: Upload Allure results
-        uses: actions/upload-artifact@v4
-        with:
-          name: allure-results
-          path: allure-results
-
       # 6. Node + сборка клиента
       - name: Set up Node
         uses: actions/setup-node@v4
