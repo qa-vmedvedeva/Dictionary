@@ -52,7 +52,7 @@ jobs:
       # Подождать запуск
       - name: Wait for server
         run: sleep 5
-      # 5. Запустить тесты из другого репо
+      # 5. Запустить тесты
       - name: Run tests
         run: |
           pytest tests -v
