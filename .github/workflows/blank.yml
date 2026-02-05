@@ -18,6 +18,7 @@ jobs:
         uses: actions/checkout@v4
         with:
           repository: qa-vmedvedeva/Dictionary-tests
+          ref: master
           path: ./
           token: ${{ secrets.TESTS_REPO_TOKEN }}
 
