@@ -12,6 +12,8 @@ jobs:
       # 1. Скачать приложение
       - name: Checkout app repo
         uses: actions/checkout@v4
+        with:
+          path: app
 
       # 2. Скачать репо с тестами
       - name: Checkout tests repo
@@ -19,7 +21,7 @@ jobs:
         with:
           repository: qa-vmedvedeva/Dictionaty_test
           ref: master
-          path: ./
+          path: tests
           token: ${{ secrets.TESTS_REPO_TOKEN }}
 
       # 3. Python
@@ -34,7 +36,7 @@ jobs:
           pip install -r ./requirements.txt
 
       - name: Add app to PYTHONPATH
-        run: echo "PYTHONPATH=$PYTHONPATH:$(pwd)" >> $GITHUB_ENV
+        run: echo "PYTHONPATH=$PYTHONPATH:$(pwd)/app" >> $GITHUB_ENV
         
       # 5. Запустить тесты из другого репо
       - name: Run tests
