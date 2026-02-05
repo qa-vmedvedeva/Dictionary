@@ -37,7 +37,21 @@ jobs:
 
       - name: Add app to PYTHONPATH
         run: echo "PYTHONPATH=$PYTHONPATH:$(pwd)/app" >> $GITHUB_ENV
-        
+
+        # Установить зависимости сервера
+      - name: Install server deps
+        working-directory: ./app/server
+        run: npm install
+      
+      # Запустить сервер
+      - name: Start server
+        working-directory: ./app/server
+        run: |
+          nohup node index.js &
+      
+      # Подождать запуск
+      - name: Wait for server
+        run: sleep 5
       # 5. Запустить тесты из другого репо
       - name: Run tests
         run: |
