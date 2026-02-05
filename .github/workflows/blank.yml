@@ -7,11 +7,7 @@ on:
 jobs:
   test-app:
     runs-on: ubuntu-latest
-    services:
-      sqlite:
-        image: nouchka/sqlite3   # просто контейнер, БД файловая
-        options: >-
-          --health-cmd "echo ok"
+    
     steps:
       # 1. Скачать приложение
       - name: Checkout app repo
