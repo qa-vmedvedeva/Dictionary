@@ -40,3 +40,7 @@ export const getWordByID = async (id) => {
     }
     return response.json();
 }
+export const searchWords = async (query) => {
+    const res = await fetch(`${API_URL}/search?q=${query}`);
+    return res.json();
+};

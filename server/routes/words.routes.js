@@ -1,5 +1,5 @@
 import express from "express";
-import {addWord,deleteWord,getAllWords, editWord, getWordByID} from "../services/words.service.js"
+import {addWord,deleteWord,getAllWords, editWord, getWordByID, getWords} from "../services/words.service.js"
 
 const router = express.Router();
 
@@ -10,8 +10,8 @@ router.get("/",async (_, res) => {
 
 router.post("/",async (req, res) => {
     const { word, translation } = req.body;
-    if (!word || !translation) {
-        return res.status(400).json({ message: "word and translation required" });
+    if (!word || !translation ) {
+        return res.status(400).json({ message: "Word and translation required" });
     }
     const result = await addWord({word, translation});
     res.status(201).json(result);
@@ -26,7 +26,7 @@ router.put("/:id",async (req, res) => {
     const { word, translation } = req.body;
     const { id } = req.params;
     if (!word || !translation) {
-        return res.status(400).json({ message: "word and translation required" });
+        return res.status(400).json({ message: "Word and translation required" });
     }
     const existingWord = await getWordByID(id);
     if (!existingWord) {
@@ -38,10 +38,24 @@ router.put("/:id",async (req, res) => {
 
     return res.json({ message: "Word updated successfully" });
 });
+router.get("/search", async (req, res) => {
+    const { q } = req.query;
+
+    if (!q) {
+        return res.status(400).json({ error: "Query is required" });
+    }
+
+    try {
+        const words = await getWords(q);
+        res.json(words);
+    } catch (e) {
+        res.status(500).json({ error: "Search error" });
+    }
+});
 router.get("/:id",async (req,res) => {
     const word = await getWordByID(req.params.id);
     if(!word) {
-        return res.status(404).json({message: "Word not found"});
+        return res.status(404).json({message: "Wrong path! Word not found"});
     }
    res.json(word);
 });

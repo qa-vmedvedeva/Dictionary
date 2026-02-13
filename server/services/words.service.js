@@ -47,4 +47,17 @@ export const getWordByID = (id) =>
                 resolve(row);
             }
         );
+    });export const getWords = (query) => {
+    return new Promise((resolve, reject) => {
+        const sql = `
+            SELECT * FROM words
+            WHERE word LIKE ? 
+            ORDER BY word ASC
+        `;
+
+        db.all(sql, [`%${query}%`], (err, rows) => {
+            if (err) reject(err);
+            else resolve(rows);
+        });
     });
+};

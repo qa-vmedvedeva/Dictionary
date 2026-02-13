@@ -1,28 +1,47 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 
 import Table from "../../ui/Table";
 import IconButton from "../../ui/IconButton";
 
 
-import { getWords, deleteWord } from "../../services/words.service";
-import { faPlusCircle, faTrash, faPen } from '@fortawesome/free-solid-svg-icons';
+import { getWords, deleteWord, searchWords } from "../../services/words.service";
+import { faPlusCircle, faTrash, faPen, faSearch, faXmark } from '@fortawesome/free-solid-svg-icons';
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
+import Input from "../../ui/Input";
+
 export default function WordsListPage() {
     const [words, setWords] = useState([]);
     const navigate = useNavigate();
     const [sortField, setSortField] = useState("word");
     const [sortDirection, setSortDirection] = useState("asc");
+    const [search, setSearch] = useState("");
+    const [isSearchOpen, setIsSearchOpen] = useState(false);
+    const inputRef = useRef(null);
 
+    useEffect(() => {
+        if (isSearchOpen) {
+            inputRef.current?.focus();
+        }
+    }, [isSearchOpen]);
+    async function loadWords() {
+        const data = await getWords();
+        setWords(data);
+    }
+
+    useEffect(() => {
+        if (search.trim() === "") {
+            loadWords();
+        } else {
+            searchWords(search).then(setWords);
+        }
+    }, [search]);
 
     useEffect(() => {
         loadWords();
     }, []);
 
-    async function loadWords() {
-        const data = await getWords();
-        setWords(data);
-    }
+
 
     async function handleDelete(id) {
         if (!window.confirm("Удалить слово?")) return;
@@ -86,13 +105,44 @@ export default function WordsListPage() {
     return (
         <div>
             <h1>Словарь</h1>
-            <IconButton
-                onClick={handleAddClick}
-                size={"lg"}
-            >
-                <FontAwesomeIcon icon={faPlusCircle}/>
-            </IconButton>
-
+            <div className="button-bar">
+                <IconButton
+                    onClick={handleAddClick}
+                    size={"lg"}
+                >
+                    <FontAwesomeIcon icon={faPlusCircle}/>
+                </IconButton>
+                {!isSearchOpen ? (
+                    <IconButton
+                        size={"lg"}
+                        onClick={() => setIsSearchOpen(true)}>
+                        <FontAwesomeIcon icon={faSearch} />
+                    </IconButton>
+                ) : (
+                    <div className="search-box">
+                        <Input
+                            ref={inputRef}
+                            placeholder="Поиск слова..."
+                            value={search}
+                            onChange={(e) => setSearch(e.target.value)}
+                            onKeyDown={(e) => {
+                                if (e.key === "Escape") {
+                                    setIsSearchOpen(false);
+                                    setSearch("");
+                                }
+                            }}
+                        />
+                        <IconButton
+                            onClick={() => {
+                                setIsSearchOpen(false);
+                                setSearch("");
+                            }}
+                        >
+                            <FontAwesomeIcon icon={faXmark}/>
+                        </IconButton>
+                    </div>
+                )}
+            </div>
             <Table
                 columns={columns}
                 data={sortedWords}

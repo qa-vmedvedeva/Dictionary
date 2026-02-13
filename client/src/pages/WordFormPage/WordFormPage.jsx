@@ -76,7 +76,9 @@ export default function WordFormPage() {
                 {isEditMode ? "Сохранить" : "Добавить"}
             </Button>
             {isEditMode && (
-            <Button  variant="danger"
+            <Button
+                type="button"
+                variant="danger"
                 onClick={handleDelete}
             >
                 Удалить слово

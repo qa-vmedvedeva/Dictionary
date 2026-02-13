@@ -22,4 +22,20 @@ button {
     padding: 0;
     cursor: pointer;
 }
+.search-box {
+    animation: fadeIn 0.2s ease;
+    width: auto;
+}
+.button-bar {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+.button-bar input {
+    flex: 1;
+}
+@keyframes fadeIn {
+    from { opacity: 0; transform: scale(0.95); }
+    to { opacity: 1; transform: scale(1); }
+}
 

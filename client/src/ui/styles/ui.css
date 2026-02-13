@@ -2,13 +2,15 @@
 
 /* INPUT */
 .input {
-    width: 20%;
     padding: 8px 10px;
     border-radius: var(--radius-sm);
     border: 1px solid var(--color-border);
     background: var(--color-surface);
     color: var(--color-text);
     margin-top: auto;
+    font-size: 14px;
+    width: 200px;
+    flex: 1;
 }
 
 .input:focus {
@@ -18,7 +20,7 @@
 
 /* TABLE */
 .table {
-    width: 100%;
+    width: 80%;
     border-collapse: collapse;
 }
 
@@ -91,7 +93,6 @@ h3 {
     color: var(--color-text-primary);
     font-size: 14px;
     font-family: var(--font-main);
-
     transition: border-color 0.2s, box-shadow 0.2s;
 }
 
