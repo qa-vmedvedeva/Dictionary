@@ -56,17 +56,35 @@ jobs:
       #- name: Run tests
       #  run: |
       #    pytest tests -v
-      - name: Run tests with Allure
-        run: pytest --alluredir=allure-results  |
-          allure generate allure-results -o allure-report
-      - name: Upload Allure results
+      # Java
+      - name: Set up Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '17'
+      
+      # Allure
+      - name: Install Allure
+        run: |
+          wget https://github.com/allure-framework/allure2/releases/latest/download/allure-2.27.0.tgz
+          tar -xzf allure-2.27.0.tgz
+          sudo mv allure-2.27.0 /opt/allure
+          sudo ln -s /opt/allure/bin/allure /usr/bin/allure
+      
+      # Тесты
+      - name: Run tests
+        run: pytest --alluredir=allure-results
+      
+      # Отчёт
+      - name: Generate Allure report
+        run: allure generate allure-results -o allure-report
+      
+      # Сохранение
+      - name: Upload Allure report
         uses: actions/upload-artifact@v4
         with:
-          name: allure-results
-          path: allure-results
-      - name: Generate Allure report
-        run: |
-          allure generate allure-results -o allure-report
+          name: allure-report
+          path: allure-report
       # 6. Node + сборка клиента
       - name: Set up Node
         uses: actions/setup-node@v4
