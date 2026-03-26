@@ -53,9 +53,9 @@ jobs:
       - name: Wait for server
         run: sleep 5
       # 5. Запустить тесты
-      - name: Run tests
-        run: |
-          pytest tests -v
+      #- name: Run tests
+      #  run: |
+      #    pytest tests -v
       - name: Run tests with Allure
         run: pytest --alluredir=allure-results 
       - name: Upload Allure results
