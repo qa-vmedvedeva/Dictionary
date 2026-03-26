@@ -56,7 +56,16 @@ jobs:
       - name: Run tests
         run: |
           pytest tests -v
-          
+      - name: Run tests with Allure
+        run: pytest --alluredir=allure-results 
+      - name: Upload Allure results
+        uses: actions/upload-artifact@v4
+        with:
+          name: allure-results
+          path: allure-results
+      - name: Generate Allure report
+        run: |
+          allure generate allure-results -o allure-report
       # 6. Node + сборка клиента
       - name: Set up Node
         uses: actions/setup-node@v4
