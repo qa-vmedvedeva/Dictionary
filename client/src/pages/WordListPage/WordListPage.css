@@ -23,6 +23,7 @@ button {
     cursor: pointer;
 }
 .search-box {
+    display: flex;
     animation: fadeIn 0.2s ease;
     width: auto;
 }
