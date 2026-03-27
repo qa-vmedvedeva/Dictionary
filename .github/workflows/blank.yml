@@ -1,0 +1,100 @@
+name: App + Tests CI
+
+on:
+  push:
+    branches: [ master ]
+
+jobs:
+  test-app:
+    runs-on: ubuntu-latest
+    
+    steps:
+      # 1. Скачать приложение
+      - name: Checkout app repo
+        uses: actions/checkout@v4
+        with:
+          path: app
+
+      # 2. Скачать репо с тестами
+      - name: Checkout tests repo
+        uses: actions/checkout@v4
+        with:
+          repository: qa-vmedvedeva/Dictionaty_test
+          ref: master
+          path: tests
+          token: ${{ secrets.TESTS_REPO_TOKEN }}
+
+      # 3. Python
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      # 4. Установить зависимости тестов
+      - name: Install test deps
+        run: |
+          pip install -r tests/requirements.txt
+
+      - name: Add app to PYTHONPATH
+        run: echo "PYTHONPATH=$PYTHONPATH:$(pwd)/app" >> $GITHUB_ENV
+
+        # Установить зависимости сервера
+      - name: Install server deps
+        working-directory: ./app/server
+        run: npm install
+      
+      # Запустить сервер
+      - name: Start server
+        working-directory: ./app/server
+        run: |
+          nohup node index.js &
+      
+      # Подождать запуск
+      - name: Wait for server
+        run: sleep 5
+      # 5. Запустить тесты
+      #- name: Run tests
+      #  run: |
+      #    pytest tests -v
+      # Java
+      - name: Set up Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '17'
+      
+      # Allure
+      - name: Install Allure
+        run: |
+          wget https://github.com/allure-framework/allure2/releases/download/2.38.1/allure-2.38.1.tgz
+          tar -xzf allure-2.38.1.tgz
+          sudo mv allure-2.38.1 /opt/allure
+          sudo ln -s /opt/allure/bin/allure /usr/bin/allure
+      
+      # Тесты
+      - name: Run tests
+        run: pytest --alluredir=allure-results
+      
+      # Отчёт
+      - name: Generate Allure report
+        run: allure generate allure-results -o allure-report
+      
+      # Сохранение
+      - name: Upload Allure report
+        uses: actions/upload-artifact@v4
+        with:
+          name: allure-report
+          path: allure-report
+      # 6. Node + сборка клиента
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install client deps
+        working-directory: ./app/client
+        run: npm install
+
+      - name: Build React app
+        working-directory: ./app/client
+        run: npm run build
